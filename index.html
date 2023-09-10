@@ -56,30 +56,48 @@
                     this.angular_v = 0.01;
             }
 
-            draw(ctx) {
+            draw(ctx, wrap_pad = 48) {
                 ctx.save();
 
-                this.coords[0] = (this.coords[0] + this.linear_v[0] + ctx.canvas.width) % ctx.canvas.width;
-                this.coords[1] = (this.coords[1] + this.linear_v[1] + ctx.canvas.height) % ctx.canvas.height;
-                this.angle = (this.angle + this.angular_v) % (2 * Math.PI);
+                this.coords[0] += this.linear_v[0];
+                this.coords[1] += this.linear_v[1];
+                this.angle += this.angular_v;
+
+                if (this.coords[0] < -wrap_pad)
+                    this.coords[0] = ctx.canvas.width + wrap_pad;
+                else if (this.coords[0] > ctx.canvas.width + wrap_pad)
+                    this.coords[0] = -wrap_pad;
+
+                if (this.coords[1] < -wrap_pad)
+                    this.coords[1] = ctx.canvas.height + wrap_pad;
+                else if (this.coords[1] > ctx.canvas.height + wrap_pad)
+                    this.coords[1] = -wrap_pad;
 
                 ctx.translate(this.coords[0], this.coords[1]);
                 ctx.rotate(this.angle);
                 ctx.drawImage(this.sprite, -this.sprite.width / 2, -this.sprite.height / 2);
+
                 ctx.restore();
             }
+
 
         }
 
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
-        const flying = new FlyingObject('amogus-sm.webp');
-        flying.randomize(ctx);
+        const obj_amount = 8;
+        const objects = [];
+        for (let i = 0; i < obj_amount; i++) {
+            new_obj = new FlyingObject('amogus-sm.webp');
+            new_obj.randomize(ctx);
+            objects.push(new_obj);
+        }
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            flying.draw(ctx);
+            for (let i = 0; i < obj_amount; i++)
+                objects[i].draw(ctx);
             requestAnimationFrame(animate);
         }
 
