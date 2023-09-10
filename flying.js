@@ -8,7 +8,7 @@ class FlyingObject {
         this.sprite = new Image();
         this.sprite.src = sprite;
         this.sprite.onerror = () => {
-            console.warn(`Error loading sprite for FlyingObject (id: ${this.id}, sprite: ${this.sprite.src}).`);
+            console.warn(`Error loading sprite for FlyingObject (id: ${this.id}, sprite: \'${this.sprite.src}\').`);
         };
 
         this.coords = init_coords;
@@ -128,10 +128,20 @@ document.addEventListener('mousedown', delay_fn(on_mouse_down, 16.6));
 document.addEventListener('mouseup', delay_fn(on_mouse_up, 16.6));
 document.addEventListener('mousemove', delay_fn(on_mouse_move, 16.6));
 
-const obj_amount = 10;
+
+const sprites = [
+    'static/images/amogus-sm.png',
+    'static/images/artificial-intelligence.png',
+    'static/images/cloud.png',
+    'static/images/gaming-pad.png',
+    'static/images/idea-bulb.png',
+    'static/images/idea.png',
+    'static/images/setting.png',
+];
+
 const objects = [];
-for (let i = 0; i < obj_amount; i++) {
-    new_obj = new FlyingObject('amogus-sm.webp');
+for (let i = 0; i < sprites.length; i++) {
+    new_obj = new FlyingObject(sprites[i]);
     new_obj.randomize(ctx);
     objects.push(new_obj);
 }
@@ -142,7 +152,7 @@ function animate() {
         document.getElementById('canvas').height = window.innerHeight;
     }, 16.6)();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < obj_amount; i++) {
+    for (let i = 0; i < sprites.length; i++) {
         if (mouse_pressed)
             objects[i].click_attract(
                 [mouse_coords[0], mouse_coords[1]]
