@@ -30,20 +30,9 @@ class FlyingObject {
             this.angular_v = 0.01;
     }
 
-    click_attract(ctx, mouse_coords, well_sprite = undefined) {
+    click_attract(mouse_coords, strength = 0.08) {
         const dx = mouse_coords[0] - this.coords[0];
         const dy = mouse_coords[1] - this.coords[1];
-
-        if (well_sprite !== undefined) {
-            ctx.save();
-            /*ctx.beginPath();
-            ctx.arc(mouse_coords[0], mouse_coords[1], 5, 0, 2 * Math.PI);
-            ctx.fillStyle = 'red';
-            ctx.fill();
-            ctx.closePath();*/
-            ctx.drawImage(well_sprite, mouse_coords[0], mouse_coords[1]);
-            ctx.restore();
-        }
 
         const dist = Math.sqrt(dx * dx + dy * dy);
 
@@ -51,8 +40,8 @@ class FlyingObject {
             const incr_x = dx / dist;
             const incr_y = dy / dist;
 
-            this.linear_v[0] += incr_x * 0.1;
-            this.linear_v[1] += incr_y * 0.1;
+            this.linear_v[0] += incr_x * strength;
+            this.linear_v[1] += incr_y * strength;
         }
     }
 
@@ -155,7 +144,7 @@ function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < obj_amount; i++) {
         if (mouse_pressed)
-            objects[i].click_attract(ctx,
+            objects[i].click_attract(
                 [mouse_coords[0], mouse_coords[1]]
             );
         objects[i].draw(ctx);
