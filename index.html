@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Make the canvas as wide as the page, and 4000px tall */
+        canvas {
+            width: 100%;
+            height: 600px;
+            background-color: #eee;
+            border: 1px solid #000;
+        }
+        /* Make the button stay in the center of the canvas, sticky */
+        button {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <button id="staticButton">Hello World</button>
+
+    <script>
+        class FlyingObject {
+            static init_id = 0;
+
+            constructor(sprite_dir, init_coords = [0, 0], linear_v = [0, 0], angular_v = 0) {
+                this.id = FlyingObject.init_id;
+                FlyingObject.init_id++;
+
+                this.sprite = new Image();
+                this.sprite.src = sprite_dir;
+                this.sprite.onerror = () => {
+                    console.warn(`Error loading sprite for FlyingObject (id: ${this.id}, sprite_dir: ${this.sprite.src}).`);
+                };
+
+                this.coords = init_coords;
+                this.linear_v = linear_v;
+
+                this.angle = 0;
+                this.angular_v = angular_v;
+            }
+
+            randomize(ctx) {
+                this.coords[0] = Math.random() * ctx.canvas.width;
+                this.coords[1] = Math.random() * ctx.canvas.height;
+                this.linear_v = [Math.random() * 3 - 1.5, Math.random() * 3 - 1.5];
+                if (this.linear_v[0] < 0.4 && this.linear_v[0] > -0.4)
+                    this.linear_v[0] = 0.4;
+                if (this.linear_v[1] < 0.4 && this.linear_v[1] > -0.4)
+                    this.linear_v[1] = 0.4;
+                this.angular_v = Math.random() * 0.1 - 0.05;
+                if (this.angular_v < 0.01 && this.angular_v > -0.01)
+                    this.angular_v = 0.01;
+            }
+
+            draw(ctx) {
+                ctx.save();
+
+                this.coords[0] = (this.coords[0] + this.linear_v[0] + ctx.canvas.width) % ctx.canvas.width;
+                this.coords[1] = (this.coords[1] + this.linear_v[1] + ctx.canvas.height) % ctx.canvas.height;
+                this.angle = (this.angle + this.angular_v) % (2 * Math.PI);
+
+                ctx.translate(this.coords[0], this.coords[1]);
+                ctx.rotate(this.angle);
+                ctx.drawImage(this.sprite, -this.sprite.width / 2, -this.sprite.height / 2);
+                ctx.restore();
+            }
+
+        }
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const flying = new FlyingObject('amogus-sm.webp');
+        flying.randomize(ctx);
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            flying.draw(ctx);
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
