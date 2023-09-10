@@ -1,19 +1,18 @@
 class FlyingObject {
     static init_id = 0;
 
-    constructor(sprite_dir, init_coords = [0, 0], linear_v = [0, 0], angular_v = 0) {
+    constructor(sprite, init_coords = [0, 0], linear_v = [0, 0], angular_v = 0) {
         this.id = FlyingObject.init_id;
         FlyingObject.init_id++;
 
         this.sprite = new Image();
-        this.sprite.src = sprite_dir;
+        this.sprite.src = sprite;
         this.sprite.onerror = () => {
-            console.warn(`Error loading sprite for FlyingObject (id: ${this.id}, sprite_dir: ${this.sprite.src}).`);
+            console.warn(`Error loading sprite for FlyingObject (id: ${this.id}, sprite: ${this.sprite.src}).`);
         };
 
         this.coords = init_coords;
         this.linear_v = linear_v;
-
         this.angle = 0;
         this.angular_v = angular_v;
     }
@@ -31,17 +30,20 @@ class FlyingObject {
             this.angular_v = 0.01;
     }
 
-    click_attract(ctx, mouse_coords) {
+    click_attract(ctx, mouse_coords, well_sprite = undefined) {
         const dx = mouse_coords[0] - this.coords[0];
         const dy = mouse_coords[1] - this.coords[1];
 
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(mouse_coords[0], mouse_coords[1], 5, 0, 2 * Math.PI);
-        ctx.fillStyle = 'red';
-        ctx.fill();
-        ctx.closePath();
-        ctx.restore();
+        if (well_sprite !== undefined) {
+            ctx.save();
+            /*ctx.beginPath();
+            ctx.arc(mouse_coords[0], mouse_coords[1], 5, 0, 2 * Math.PI);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+            ctx.closePath();*/
+            ctx.drawImage(well_sprite, mouse_coords[0], mouse_coords[1]);
+            ctx.restore();
+        }
 
         const dist = Math.sqrt(dx * dx + dy * dy);
 
@@ -67,8 +69,7 @@ class FlyingObject {
         if (this.coords[0] < -wrap_pad) {
             this.coords[0] = ctx.canvas.width + wrap_pad;
             has_wrapped_x = true;
-        }
-        else if (this.coords[0] > ctx.canvas.width + wrap_pad) {
+        } else if (this.coords[0] > ctx.canvas.width + wrap_pad) {
             this.coords[0] = -wrap_pad;
             has_wrapped_x = true;
         }
@@ -76,15 +77,13 @@ class FlyingObject {
         if (this.coords[1] < -wrap_pad) {
             this.coords[1] = ctx.canvas.height + wrap_pad;
             has_wrapped_y = true;
-        }
-        else if (this.coords[1] > ctx.canvas.height + wrap_pad) {
+        } else if (this.coords[1] > ctx.canvas.height + wrap_pad) {
             this.coords[1] = -wrap_pad;
             has_wrapped_y = true;
         }
 
         if (has_wrapped_x && Math.abs(this.linear_v[0]) > 1.5)
             this.linear_v[0] *= 0.8;
-
         if (has_wrapped_y && Math.abs(this.linear_v[1]) > 1.5)
             this.linear_v[1] *= 0.8;
 
@@ -124,7 +123,7 @@ function on_mouse_move(event) {
     }
 };
 
-function event_throttler(fn, delay) {
+function delay_fn(fn, delay) {
     let timer_id;
     return function (event) {
         if (!timer_id) {
@@ -136,11 +135,11 @@ function event_throttler(fn, delay) {
     };
 }
 
-document.addEventListener('mousedown', event_throttler(on_mouse_down, 16.6));
-document.addEventListener('mouseup', event_throttler(on_mouse_up, 16.6));
-document.addEventListener('mousemove', event_throttler(on_mouse_move, 16.6));
+document.addEventListener('mousedown', delay_fn(on_mouse_down, 16.6));
+document.addEventListener('mouseup', delay_fn(on_mouse_up, 16.6));
+document.addEventListener('mousemove', delay_fn(on_mouse_move, 16.6));
 
-const obj_amount = 1;
+const obj_amount = 10;
 const objects = [];
 for (let i = 0; i < obj_amount; i++) {
     new_obj = new FlyingObject('amogus-sm.webp');
@@ -149,6 +148,10 @@ for (let i = 0; i < obj_amount; i++) {
 }
 
 function animate() {
+    delay_fn(() => {
+        document.getElementById('canvas').width = window.innerWidth;
+        document.getElementById('canvas').height = window.innerHeight;
+    }, 16.6)();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < obj_amount; i++) {
         if (mouse_pressed)
