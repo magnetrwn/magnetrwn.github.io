@@ -27,11 +27,11 @@
             ],
             [
                 "scp user@server:/who_am_i.txt .",
-                "I\"m a full-stack developer!"
+                "I'm a full-stack developer!"
             ],
             [
-                "git commit -m \"New Project.\"",
-                "Let\"s start your new project!"
+                "git commit -m 'New Project.'",
+                "Let's start your new project!"
             ],
             [
                 "npm install -g coffee",
@@ -39,15 +39,15 @@
             ],
             [
                 "python3 -m build",
-                "Let\"s build everything you need!"
+                "Let's build everything you need!"
             ],
             [
                 "docker run -p 8080:80 app",
-                "Let\"s deploy your app!"
+                "Let's deploy your app!"
             ],
             [
                 "git push origin main",
-                "Let\"s publish your work!"
+                "Let's publish your work!"
             ]
         ]
     }
