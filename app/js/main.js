@@ -1,6 +1,9 @@
-import { setup_sprites, launch_animation } from "./flying.js";
+import { FlyingManager } from "./flying.js";
 
-setup_sprites([
+let flmgr = new FlyingManager();
+
+flmgr.setup_canvas('canvas');
+flmgr.setup_sprites([
     'static/images/2572497.png',
     'static/images/2572724.png',
     'static/images/2807340.png',
@@ -18,4 +21,4 @@ setup_sprites([
     'static/images/usb_6540526.png',
 ]);
 
-launch_animation();
+flmgr.launch_animation();
