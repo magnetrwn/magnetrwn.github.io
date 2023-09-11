@@ -6,17 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="My Personal Portfolio">
     <link href="static/images/amogus-sm.png" rel="icon" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700&display=swap">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .no-select {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: -moz-none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="fixed inset-0" style="background: linear-gradient(60deg, #443c75, #4d718b);"></div>
+    <div class="fixed inset-0"
+         style="background: linear-gradient(60deg, #443c75ff, #4d718bff);">
+    </div>
     <div class="fixed inset-0 flex items-center justify-center w-full h-full m-0 p-0 opacity-25">
         <canvas id="canvas"></canvas>
     </div>
     <div class="fixed inset-0 flex items-center justify-center h-screen">
-        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-8 text-white">
-            <h1 class="text-4xl font-bold">Hello World</h1>
-            <p class="text-lg mt-4">Welcome to My Personal Portfolio!</p>
+        <div class="fixed inset-0 md:inset-[120px] md:rounded-xl p-5 md:p-12 pt-8 text-white md:ring-4 md:ring-white"
+             style="background-image: linear-gradient(30deg, #1f114dff, #1324477f);">
+            <h1 class="no-select text-4xl font-bold"
+                style="font-family: 'JetBrains Mono'; font-weight: 700;">@magnetrwn</h1>
+            <p class="no-select text-lg mt-4"
+               style="font-family: 'JetBrains Mono'; font-weight: 200;">Welcome to My Personal Portfolio!</p>
         </div>
     </div>
 </body>
