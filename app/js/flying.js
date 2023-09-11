@@ -143,7 +143,7 @@ export class FlyingManager {
         delay_fn(() => {
             document.getElementById('canvas').width = window.innerWidth;
             document.getElementById('canvas').height = window.innerHeight;
-        }, 20)();
+        }, 75)();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         for (let i = 0; i < this.objects.length; i++) {
             if (this.mouse_pressed)
@@ -152,7 +152,9 @@ export class FlyingManager {
                 );
                 this.objects[i].draw(this.ctx);
         }
-        requestAnimationFrame(this.launch_animation);
+        delay_fn(() => {
+            requestAnimationFrame(this.launch_animation);
+        }, 4)();
     }
 }
 
