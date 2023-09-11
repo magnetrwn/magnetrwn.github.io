@@ -27,13 +27,13 @@ async function typing_animation() {
     const title = document.getElementById('main-title');
     const subtitle = document.getElementById('main-subtitle');
 
-    await type(title, 75, '@magnetrwn')
+    await type(title, 75, strings.typer.title);
     await delay(500);
 
     let i = 0;
     while (true) {
         subtitle.style.color = '#aaaaaaff';
-        subtitle.innerHTML = '<i>$</i> ';
+        subtitle.innerHTML = strings.typer.leading;
         await delay(500);
         await type(subtitle, 75, strings.typer.commands[i][0]);
         await delay(1500);
@@ -49,6 +49,9 @@ async function typing_animation() {
 }
 
 function main() {
+    document.getElementById('toggle-main-box').innerHTML = strings.toggle_main_box;
+    document.getElementById('copyright').innerHTML = strings.copyright;
+
     document.getElementById('toggle-main-box').addEventListener('pointerdown', () => {
         const main_box = document.getElementById('main-box');
         main_box.style.opacity = 1 - main_box.style.opacity;
