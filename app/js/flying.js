@@ -152,9 +152,7 @@ export class FlyingManager {
                 );
                 this.objects[i].draw(this.ctx);
         }
-        delay_fn(() => {
-            requestAnimationFrame(this.launch_animation);
-        }, 4)();
+        requestAnimationFrame(this.launch_animation);
     }
 }
 
