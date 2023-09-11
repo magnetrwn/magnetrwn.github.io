@@ -26,7 +26,7 @@ function flying_manager() {
     fl.launch_animation();
 }
 
-async function delay(ms) {
+function delay(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
@@ -36,30 +36,31 @@ async function typing_animation() {
     const title = document.getElementById('main-title');
     const subtitle = document.getElementById('main-subtitle');
     const commands = [
-        ['cat /var/www/html/what_s_this.txt', 'This is my developer portfolio!'],
+        ['cat /var/www/what_s_this.txt', 'This is my developer portfolio!'],
         ['scp user@server:/who_am_i.txt .', 'I\'m a full-stack developer!'],
         ['git commit -m \'New Project.\'', 'Let\'s start your new project!'],
-        ['npm install -g coffee', 'Fueling your projects with caffeine!'],
+        ['npm install -g coffee', 'Fueled by caffeine!'],
         ['python3 -m build', 'Let\'s build everything you need!'],
-        ['chmod +x script.sh', 'Let\'s automate your work!'],
         ['docker run -p 8080:80 app', 'Let\'s deploy your app!'],
         ['git push origin main', 'Let\'s publish your work!'],
     ];
 
     await type(title, 75, '@magnetrwn')
-    await delay(400);
+    await delay(500);
 
     let i = 0;
     while (true) {
-        subtitle.style.color = '#afafafff';
-        subtitle.innerHTML = '<b>$</b> ';
+        subtitle.style.color = '#aaaaaaff';
+        subtitle.innerHTML = '<i>$</i> ';
         await delay(500);
         await type(subtitle, 75, commands[i][0]);
         await delay(1500);
-        subtitle.style.color = '#ffffffff';
+        subtitle.style.color = '#555555ff';
         subtitle.innerHTML = commands[i][1];
+        await delay(75);
+        subtitle.style.color = '#ffffffff';
         await delay(4000);
-        await untype(subtitle, 37);
+        await untype(subtitle, 50);
         await delay(2000);
         i = (i + 1) % commands.length;
     }
