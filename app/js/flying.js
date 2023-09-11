@@ -30,7 +30,7 @@ class FlyingObject {
             this.angular_v = 0.01;
     }
 
-    click_attract(mouse_coords, strength = 0.08) {
+    click_attract(mouse_coords, strength = 0.12) {
         const dx = mouse_coords[0] - this.coords[0];
         const dy = mouse_coords[1] - this.coords[1];
 
