@@ -30,9 +30,10 @@ class FlyingObject {
             this.angular_v = 0.01;
     }
 
-    click_attract(mouse_coords, strength = 0.12) {
-        const dx = mouse_coords[0] - this.coords[0];
-        const dy = mouse_coords[1] - this.coords[1];
+    apply_force(near_coords, strength = 0.12) {
+        // you can both attract and repel objects with the strength parameter
+        const dx = near_coords[0] - this.coords[0];
+        const dy = near_coords[1] - this.coords[1];
 
         const dist = Math.sqrt(dx * dx + dy * dy);
 
@@ -90,7 +91,7 @@ export class FlyingManager {
         this.ctx = undefined;
         this.objects = [];
 
-        this.mouse_coords = [0, 0];
+        this.near_coords = [0, 0];
         this.mouse_pressed = false;
 
         this.launch_animation = this.launch_animation.bind(this);
@@ -99,8 +100,8 @@ export class FlyingManager {
     _on_pointer_down(event) {
         this.mouse_pressed = true;
         const rect = canvas.getBoundingClientRect();
-        this.mouse_coords[0] = event.clientX - rect.left;
-        this.mouse_coords[1] = event.clientY - rect.top;
+        this.near_coords[0] = event.clientX - rect.left;
+        this.near_coords[1] = event.clientY - rect.top;
     };
 
     _on_pointer_up(event) {
@@ -110,8 +111,8 @@ export class FlyingManager {
     _on_pointer_move(event) {
         if (this.mouse_pressed) {
             const rect = canvas.getBoundingClientRect();
-            this.mouse_coords[0] = event.clientX - rect.left;
-            this.mouse_coords[1] = event.clientY - rect.top;
+            this.near_coords[0] = event.clientX - rect.left;
+            this.near_coords[1] = event.clientY - rect.top;
         }
     };
 
@@ -147,8 +148,8 @@ export class FlyingManager {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         for (let i = 0; i < this.objects.length; i++) {
             if (this.mouse_pressed)
-                this.objects[i].click_attract(
-                    [this.mouse_coords[0], this.mouse_coords[1]]
+                this.objects[i].apply_force(
+                    [this.near_coords[0], this.near_coords[1]]
                 );
                 this.objects[i].draw(this.ctx);
         }

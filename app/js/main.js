@@ -1,27 +1,18 @@
 import { FlyingManager } from "./flying.js";
 import { type, untype } from "./typer.js";
+const strings = await fetch('/static/data/strings.json')
+    .then((response) => {
+        if (!response.ok)
+            throw new Error('Failed to fetch strings.json');
+        return response.json();
+    })
+    .catch((error) => console.error(error));
 
 function flying_manager() {
     const fl = new FlyingManager();
 
     fl.setup_canvas('canvas');
-    fl.setup_sprites([
-        'static/images/2572497.png',
-        'static/images/2572724.png',
-        'static/images/2807340.png',
-        'static/images/2809291.png',
-        'static/images/2878889.png',
-        'static/images/5968544.png',
-        'static/images/amogus-sm.png',
-        'static/images/artificial-intelligence.png',
-        'static/images/cloud.png',
-        'static/images/gaming-pad.png',
-        'static/images/idea-bulb.png',
-        'static/images/idea.png',
-        'static/images/layer_6680857.png',
-        'static/images/setting.png',
-        'static/images/usb_6540526.png',
-    ]);
+    fl.setup_sprites(strings.flying.sprites);
 
     fl.launch_animation();
 }
@@ -35,15 +26,6 @@ function delay(ms) {
 async function typing_animation() {
     const title = document.getElementById('main-title');
     const subtitle = document.getElementById('main-subtitle');
-    const commands = [
-        ['cat /var/www/what_s_this.txt', 'This is my developer portfolio!'],
-        ['scp user@server:/who_am_i.txt .', 'I\'m a full-stack developer!'],
-        ['git commit -m \'New Project.\'', 'Let\'s start your new project!'],
-        ['npm install -g coffee', 'Fueled by caffeine!'],
-        ['python3 -m build', 'Let\'s build everything you need!'],
-        ['docker run -p 8080:80 app', 'Let\'s deploy your app!'],
-        ['git push origin main', 'Let\'s publish your work!'],
-    ];
 
     await type(title, 75, '@magnetrwn')
     await delay(500);
@@ -53,16 +35,16 @@ async function typing_animation() {
         subtitle.style.color = '#aaaaaaff';
         subtitle.innerHTML = '<i>$</i> ';
         await delay(500);
-        await type(subtitle, 75, commands[i][0]);
+        await type(subtitle, 75, strings.typer.commands[i][0]);
         await delay(1500);
         subtitle.style.color = '#555555ff';
-        subtitle.innerHTML = commands[i][1];
+        subtitle.innerHTML = strings.typer.commands[i][1];
         await delay(75);
         subtitle.style.color = '#ffffffff';
         await delay(4000);
         await untype(subtitle, 50);
         await delay(2000);
-        i = (i + 1) % commands.length;
+        i = (i + 1) % strings.typer.commands.length;
     }
 }
 
