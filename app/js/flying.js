@@ -85,7 +85,6 @@ class FlyingObject {
 }
 
 export class FlyingManager {
-
     constructor() {
         this.canvas = undefined;
         this.ctx = undefined;
@@ -97,18 +96,18 @@ export class FlyingManager {
         this.launch_animation = this.launch_animation.bind(this);
     }
 
-    _on_mouse_down(event) {
+    _on_pointer_down(event) {
         this.mouse_pressed = true;
         const rect = canvas.getBoundingClientRect();
         this.mouse_coords[0] = event.clientX - rect.left;
         this.mouse_coords[1] = event.clientY - rect.top;
     };
 
-    _on_mouse_up(event) {
+    _on_pointer_up(event) {
         this.mouse_pressed = false;
     };
 
-    _on_mouse_move(event) {
+    _on_pointer_move(event) {
         if (this.mouse_pressed) {
             const rect = canvas.getBoundingClientRect();
             this.mouse_coords[0] = event.clientX - rect.left;
@@ -122,13 +121,9 @@ export class FlyingManager {
     }
 
     setup_sprites(sprites) {
-        document.addEventListener('mousedown', delay_fn((event) => this._on_mouse_down(event), 75));
-        document.addEventListener('mouseup', delay_fn((event) => this._on_mouse_up(event), 75));
-        document.addEventListener('mousemove', delay_fn((event) => this._on_mouse_move(event), 75));
-
-        document.addEventListener('touchstart', delay_fn((event) => this._on_mouse_down(event), 75));
-        document.addEventListener('touchend', delay_fn((event) => this._on_mouse_up(event), 75));
-        document.addEventListener('touchmove', delay_fn((event) => this._on_mouse_move(event), 75));
+        document.addEventListener('pointerdown', delay_fn((event) => this._on_pointer_down(event), 75));
+        document.addEventListener('pointerup', delay_fn((event) => this._on_pointer_up(event), 75));
+        document.addEventListener('pointermove', delay_fn((event) => this._on_pointer_move(event), 75));
 
         // This might be a problem further down the line
         document.getElementById('canvas').width = window.innerWidth;
