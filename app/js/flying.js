@@ -84,14 +84,11 @@ class FlyingObject {
     }
 }
 
-document.getElementById('canvas').width = window.innerWidth;
-document.getElementById('canvas').height = window.innerHeight;
-
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-
 let mouse_pressed = false;
 let mouse_coords = [0, 0];
+let objects = [];
 
 function on_mouse_down(event) {
     mouse_pressed = true;
@@ -124,53 +121,41 @@ function delay_fn(fn, delay) {
     };
 }
 
-document.addEventListener('mousedown', delay_fn(on_mouse_down, 75));
-document.addEventListener('mouseup', delay_fn(on_mouse_up, 75));
-document.addEventListener('mousemove', delay_fn(on_mouse_move, 75));
+export function setup_sprites(sprites) {
+    document.addEventListener('mousedown', delay_fn(on_mouse_down, 75));
+    document.addEventListener('mouseup', delay_fn(on_mouse_up, 75));
+    document.addEventListener('mousemove', delay_fn(on_mouse_move, 75));
 
-document.addEventListener('touchstart', delay_fn(on_mouse_down, 75));
-document.addEventListener('touchend', delay_fn(on_mouse_up, 75));
-document.addEventListener('touchmove', delay_fn(on_mouse_move, 75));
+    document.addEventListener('touchstart', delay_fn(on_mouse_down, 75));
+    document.addEventListener('touchend', delay_fn(on_mouse_up, 75));
+    document.addEventListener('touchmove', delay_fn(on_mouse_move, 75));
 
-const sprites = [
-    'static/images/2572497.png',
-    'static/images/2572724.png',
-    'static/images/2807340.png',
-    'static/images/2809291.png',
-    'static/images/2878889.png',
-    'static/images/5968544.png',
-    'static/images/amogus-sm.png',
-    'static/images/artificial-intelligence.png',
-    'static/images/cloud.png',
-    'static/images/gaming-pad.png',
-    'static/images/idea-bulb.png',
-    'static/images/idea.png',
-    'static/images/layer_6680857.png',
-    'static/images/setting.png',
-    'static/images/usb_6540526.png',
-];
+    // This might be a problem further down the line
+    document.getElementById('canvas').width = window.innerWidth;
+    document.getElementById('canvas').height = window.innerHeight;
 
-const objects = [];
-for (let i = 0; i < sprites.length; i++) {
-    new_obj = new FlyingObject(sprites[i]);
-    new_obj.randomize(ctx);
-    objects.push(new_obj);
+    objects = [];
+
+    let new_obj;
+    for (let i = 0; i < sprites.length; i++) {
+        new_obj = new FlyingObject(sprites[i]);
+        new_obj.randomize(ctx);
+        objects.push(new_obj);
+    }
 }
 
-function animate() {
+export function launch_animation() {
     delay_fn(() => {
         document.getElementById('canvas').width = window.innerWidth;
         document.getElementById('canvas').height = window.innerHeight;
     }, 20)();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < sprites.length; i++) {
+    for (let i = 0; i < objects.length; i++) {
         if (mouse_pressed)
             objects[i].click_attract(
                 [mouse_coords[0], mouse_coords[1]]
             );
         objects[i].draw(ctx);
     }
-    requestAnimationFrame(animate);
+    requestAnimationFrame(launch_animation);
 }
-
-animate();
