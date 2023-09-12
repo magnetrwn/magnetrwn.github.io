@@ -91,17 +91,30 @@ function set_buttons() {
         });
     }
 
-    document.getElementById('toggle-main-box').addEventListener('pointerdown', () => {
+    document.getElementById('toggle-main-box').addEventListener('pointerdown', async () => {
         const main_box = document.getElementById('main-box');
-        main_box.style.opacity = 1 - main_box.style.opacity;
+        main_box.style.transition = 'opacity 300ms ease-in-out, visibility 0.3s ease-in-out';
+
+        if (main_box.style.opacity == 1) {
+            main_box.style.opacity = 0;
+            main_box.style.visibility = 'hidden';
+            await delay(300);
+            main_box.classList.toggle('hidden');
+
+        } else {
+            main_box.classList.toggle('hidden');
+            await delay(10);
+            main_box.style.opacity = 1;
+            main_box.style.visibility = 'visible';
+        }
     });
 }
 
 function main() {
-    set_buttons();
+    //set_buttons();
     flying_manager();
-    typing_animation();
-    fade_buttons();
+    //typing_animation();
+    //fade_buttons();
 }
 
 main();

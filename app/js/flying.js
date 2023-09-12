@@ -128,9 +128,8 @@ export class FlyingManager {
         document.addEventListener('pointerup', delay_fn((event) => this._on_pointer_up(event), 75));
         document.addEventListener('pointermove', delay_fn((event) => this._on_pointer_move(event), 75));
 
-        // This might be a problem further down the line
-        document.getElementById('canvas').width = window.innerWidth;
-        document.getElementById('canvas').height = window.innerHeight;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
 
         this.objects = [];
 
@@ -143,10 +142,12 @@ export class FlyingManager {
     }
 
     launch_animation() {
-        delay_fn(() => {
-            document.getElementById('canvas').width = window.innerWidth;
-            document.getElementById('canvas').height = window.innerHeight;
-        }, 75)();
+        this.canvas.addEventListener('resize', () => {
+            delay_fn(() => {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }, 75);
+        });
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         for (let i = 0; i < this.objects.length; i++) {
             if (this.mouse_pressed)
