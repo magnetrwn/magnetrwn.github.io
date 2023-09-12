@@ -111,10 +111,10 @@ function set_buttons() {
 }
 
 function main() {
-    //set_buttons();
+    set_buttons();
     flying_manager();
-    //typing_animation();
-    //fade_buttons();
+    typing_animation();
+    fade_buttons();
 }
 
 main();

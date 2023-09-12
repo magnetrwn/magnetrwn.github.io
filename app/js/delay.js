@@ -4,14 +4,10 @@ export function delay(ms) {
     });
 };
 
-export function delay_fn(fn, ms) {
-    let timer_id;
-    return function (event) {
-        if (!timer_id) {
-            timer_id = setTimeout(() => {
-                fn(ms);
-                timer_id = null;
-            }, delay);
-        }
+export function delay_m(object, method, ms) {
+    return function() {
+        setTimeout(() => {
+            method.apply(object, arguments);
+        }, ms);
     };
 }

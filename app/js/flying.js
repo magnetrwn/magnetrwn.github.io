@@ -1,4 +1,4 @@
-import { delay_fn } from './delay.js';
+import { delay_m } from './delay.js';
 
 class FlyingObject {
     static init_id = 0;
@@ -32,10 +32,10 @@ class FlyingObject {
             this.angular_v = 0.01;
     }
 
-    apply_force(near_coords, strength = 0.12) {
+    apply_force(force_v, strength = 0.15) {
         // you can both attract and repel objects with the strength parameter
-        const dx = near_coords[0] - this.coords[0];
-        const dy = near_coords[1] - this.coords[1];
+        const dx = force_v[0] - this.coords[0];
+        const dy = force_v[1] - this.coords[1];
 
         const dist = Math.sqrt(dx * dx + dy * dy);
 
@@ -93,68 +93,68 @@ export class FlyingManager {
         this.ctx = undefined;
         this.objects = [];
 
-        this.near_coords = [0, 0];
-        this.mouse_pressed = false;
+        this.force_v = [0, 0];
+        this.is_force_active = false;
 
         this.launch_animation = this.launch_animation.bind(this);
     }
 
     _on_pointer_down(event) {
-        this.mouse_pressed = true;
-        const rect = canvas.getBoundingClientRect();
-        this.near_coords[0] = event.clientX - rect.left;
-        this.near_coords[1] = event.clientY - rect.top;
+        const rect = this.canvas.getBoundingClientRect();
+        this.is_force_active = true;
+        this.force_v[0] = event.clientX - rect.left;
+        this.force_v[1] = event.clientY - rect.top;
     };
 
     _on_pointer_up(event) {
-        this.mouse_pressed = false;
+        this.is_force_active = false;
     };
 
     _on_pointer_move(event) {
-        if (this.mouse_pressed) {
-            const rect = canvas.getBoundingClientRect();
-            this.near_coords[0] = event.clientX - rect.left;
-            this.near_coords[1] = event.clientY - rect.top;
+        if (this.is_force_active) {
+            const rect = this.canvas.getBoundingClientRect();
+            this.force_v[0] = event.clientX - rect.left;
+            this.force_v[1] = event.clientY - rect.top;
         }
     };
+
+    _on_resize(event) {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    }
 
     setup_canvas(canvas_id) {
         this.canvas = document.getElementById(canvas_id);
         this.ctx = canvas.getContext('2d');
-    }
 
-    setup_sprites(sprites) {
-        document.addEventListener('pointerdown', delay_fn((event) => this._on_pointer_down(event), 75));
-        document.addEventListener('pointerup', delay_fn((event) => this._on_pointer_up(event), 75));
-        document.addEventListener('pointermove', delay_fn((event) => this._on_pointer_move(event), 75));
+        window.addEventListener('resize', delay_m(this, this._on_resize, 75));
 
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
 
+        this.canvas.addEventListener('pointerdown', delay_m(this, this._on_pointer_down, 75));
+        this.canvas.addEventListener('pointerup', delay_m(this, this._on_pointer_up, 75));
+        this.canvas.addEventListener('pointercancel', delay_m(this, this._on_pointer_up, 75));
+        this.canvas.addEventListener('pointermove', delay_m(this, this._on_pointer_move, 75));
+    }
+
+    setup_sprites(sprites) {
         this.objects = [];
 
         let new_obj;
-        for (let i = 0; i < sprites.length; i++) {
-            new_obj = new FlyingObject(sprites[i]);
+        for (let sprite of sprites) {
+            new_obj = new FlyingObject(sprite);
             new_obj.randomize(this.ctx);
             this.objects.push(new_obj);
         }
     }
 
     launch_animation() {
-        this.canvas.addEventListener('resize', () => {
-            delay_fn(() => {
-                this.canvas.width = window.innerWidth;
-                this.canvas.height = window.innerHeight;
-            }, 75);
-        });
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        for (let i = 0; i < this.objects.length; i++) {
-            if (this.mouse_pressed)
-                this.objects[i].apply_force(
-                    [this.near_coords[0], this.near_coords[1]]
-                );
-                this.objects[i].draw(this.ctx);
+        for (let object of this.objects) {
+            if (this.is_force_active)
+                object.apply_force(this.force_v);
+            object.draw(this.ctx);
         }
         requestAnimationFrame(this.launch_animation);
     }
