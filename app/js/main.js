@@ -27,6 +27,7 @@ async function typing_animation() {
     const title = document.getElementById('main-title');
     const subtitle = document.getElementById('main-subtitle');
 
+    await delay(500);
     await type(title, 75, strings.typer.title);
     await delay(500);
 
