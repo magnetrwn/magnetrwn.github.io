@@ -74,17 +74,18 @@ function set_buttons() {
     }
 
     for (let icon of icon_ids) {
-
         document.getElementById(icon).style.fill = inactive_color;
         document.getElementById(icon).style.transition = '300ms ease-in-out';
     }
 
     for (let i = 0; i < button_ids.length; i++) {
         document.getElementById(button_ids[i]).addEventListener('pointerover', () => {
+            document.getElementById(button_ids[i]).style.backgroundColor = '#ffffffff';
             document.getElementById(button_ids[i]).style.color = active_colors[i];
             document.getElementById(icon_ids[i]).style.fill = active_colors[i];
         });
         document.getElementById(button_ids[i]).addEventListener('pointerout', () => {
+            document.getElementById(button_ids[i]).style.backgroundColor = '#ffffff00';
             document.getElementById(button_ids[i]).style.color = inactive_color;
             document.getElementById(icon_ids[i]).style.fill = inactive_color;
         });
