@@ -8,6 +8,12 @@ const strings = await fetch('/static/data/strings.json')
     })
     .catch((error) => console.error(error));
 
+function delay(ms) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+};
+
 function flying_manager() {
     const fl = new FlyingManager();
 
@@ -16,12 +22,6 @@ function flying_manager() {
 
     fl.launch_animation();
 }
-
-function delay(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-};
 
 async function typing_animation() {
     const title = document.getElementById('main-title');
@@ -49,10 +49,25 @@ async function typing_animation() {
     }
 }
 
+async function fade_buttons() {
+    const button1 = document.getElementById('main-button-1');
+    const button2 = document.getElementById('main-button-2');
+    const button3 = document.getElementById('main-button-3');
+    const button4 = document.getElementById('main-button-4');
+
+    await delay(1500);
+    button1.style.opacity = 1;
+    await delay(300);
+    button2.style.opacity = 1;
+    await delay(300);
+    button3.style.opacity = 1;
+    await delay(300);
+    button4.style.opacity = 1;
+}
+
 function main() {
     document.getElementById('toggle-main-box').innerHTML = strings.toggle_main_box;
     document.getElementById('copyright').innerHTML = strings.copyright;
-
     document.getElementById('toggle-main-box').addEventListener('pointerdown', () => {
         const main_box = document.getElementById('main-box');
         main_box.style.opacity = 1 - main_box.style.opacity;
@@ -60,6 +75,7 @@ function main() {
 
     flying_manager();
     typing_animation();
+    fade_buttons();
 }
 
 main();
