@@ -1,5 +1,7 @@
 import { FlyingManager } from "./flying.js";
 import { type, untype } from "./typer.js";
+import { delay } from './delay.js';
+
 const strings = await fetch('/static/data/strings.json')
     .then((response) => {
         if (!response.ok)
@@ -7,12 +9,6 @@ const strings = await fetch('/static/data/strings.json')
         return response.json();
     })
     .catch((error) => console.error(error));
-
-function delay(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-};
 
 function flying_manager() {
     const fl = new FlyingManager();
@@ -65,14 +61,43 @@ async function fade_buttons() {
     button4.style.opacity = 1;
 }
 
-function main() {
-    document.getElementById('toggle-main-box').innerHTML = strings.toggle_main_box;
-    document.getElementById('copyright').innerHTML = strings.copyright;
+function set_buttons() {
+    const button_ids = ['main-button-1', 'main-button-2', 'main-button-3', 'main-button-4'];
+    const icon_ids = ['main-button-1-icon', 'main-button-2-icon', 'main-button-3-icon', 'main-button-4-icon'];
+
+    const inactive_color = '#ffffffff';
+    let active_colors = ['#d11c4bff', '#d17f1cff', '#42a022ff', '#2262a0ff'];
+
+    for (let button of button_ids) {
+        document.getElementById(button).style.color = inactive_color;
+        document.getElementById(button).style.transition = '300ms ease-in-out';
+    }
+
+    for (let icon of icon_ids) {
+
+        document.getElementById(icon).style.fill = inactive_color;
+        document.getElementById(icon).style.transition = '300ms ease-in-out';
+    }
+
+    for (let i = 0; i < button_ids.length; i++) {
+        document.getElementById(button_ids[i]).addEventListener('pointerover', () => {
+            document.getElementById(button_ids[i]).style.color = active_colors[i];
+            document.getElementById(icon_ids[i]).style.fill = active_colors[i];
+        });
+        document.getElementById(button_ids[i]).addEventListener('pointerout', () => {
+            document.getElementById(button_ids[i]).style.color = inactive_color;
+            document.getElementById(icon_ids[i]).style.fill = inactive_color;
+        });
+    }
+
     document.getElementById('toggle-main-box').addEventListener('pointerdown', () => {
         const main_box = document.getElementById('main-box');
         main_box.style.opacity = 1 - main_box.style.opacity;
     });
+}
 
+function main() {
+    set_buttons();
     flying_manager();
     typing_animation();
     fade_buttons();

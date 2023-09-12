@@ -1,3 +1,5 @@
+import { delay_fn } from './delay.js';
+
 class FlyingObject {
     static init_id = 0;
 
@@ -155,16 +157,4 @@ export class FlyingManager {
         }
         requestAnimationFrame(this.launch_animation);
     }
-}
-
-function delay_fn(fn, delay) {
-    let timer_id;
-    return function (event) {
-        if (!timer_id) {
-            timer_id = setTimeout(() => {
-                fn(event);
-                timer_id = null;
-            }, delay);
-        }
-    };
 }

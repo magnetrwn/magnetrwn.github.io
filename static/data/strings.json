@@ -1,8 +1,4 @@
 {
-    "copyright": "Copyright &copy; 2023 magnetrwn",
-
-    "toggle_main_box": "Toggle Window",
-
     "flying": {
         "sprites": [
             "static/images/2572497.png",
