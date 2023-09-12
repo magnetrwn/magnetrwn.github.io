@@ -2,10 +2,10 @@ import { FlyingManager } from "./flying.js";
 import { type, untype } from "./typer.js";
 import { delay } from './delay.js';
 
-const strings = await fetch('/static/data/strings.json')
+const data = await fetch('/static/data/data.json')
     .then((response) => {
         if (!response.ok)
-            throw new Error('Failed to fetch strings.json');
+            throw new Error('Failed to fetch data.json');
         return response.json();
     })
     .catch((error) => console.error(error));
@@ -14,7 +14,7 @@ function flying_manager() {
     const fl = new FlyingManager();
 
     fl.setup_canvas('canvas');
-    fl.setup_sprites(strings.flying.sprites);
+    fl.setup_sprites(data.flying.sprites);
 
     fl.launch_animation();
 }
@@ -24,24 +24,24 @@ async function typing_animation() {
     const subtitle = document.getElementById('main-subtitle');
 
     await delay(500);
-    await type(title, 75, strings.typer.title);
+    await type(title, 75, data.typer.title);
     await delay(500);
 
     let i = 0;
     while (true) {
-        subtitle.style.color = '#aaaaaaff';
-        subtitle.innerHTML = strings.typer.leading;
+        subtitle.style.color = data.typer.colors.cli;
+        subtitle.innerHTML = data.typer.leading;
         await delay(500);
-        await type(subtitle, 75, strings.typer.commands[i][0]);
+        await type(subtitle, 75, data.typer.commands[i][0]);
         await delay(1500);
-        subtitle.style.color = '#555555ff';
-        subtitle.innerHTML = strings.typer.commands[i][1];
+        subtitle.style.color = data.typer.colors.transition;
+        subtitle.innerHTML = data.typer.commands[i][1];
         await delay(75);
-        subtitle.style.color = '#ffffffff';
+        subtitle.style.color = data.typer.colors.regular;
         await delay(4000);
         await untype(subtitle, 50);
         await delay(2000);
-        i = (i + 1) % strings.typer.commands.length;
+        i = (i + 1) % data.typer.commands.length;
     }
 }
 
@@ -61,33 +61,39 @@ async function fade_buttons() {
     button4.style.opacity = 1;
 }
 
-function set_buttons() {
+async function set_buttons() {
     const button_ids = ['main-button-1', 'main-button-2', 'main-button-3', 'main-button-4'];
-    const icon_ids = ['main-button-1-icon', 'main-button-2-icon', 'main-button-3-icon', 'main-button-4-icon'];
-
-    const inactive_color = '#ffffffff';
-    let active_colors = ['#d11c4bff', '#d17f1cff', '#42a022ff', '#2262a0ff'];
-
-    for (let button of button_ids) {
-        document.getElementById(button).style.color = inactive_color;
-        document.getElementById(button).style.transition = '300ms ease-in-out';
-    }
-
-    for (let icon of icon_ids) {
-        document.getElementById(icon).style.fill = inactive_color;
-        document.getElementById(icon).style.transition = '300ms ease-in-out';
-    }
+    let icon_ids = []
+    for (let i = 0; i < button_ids.length; i++)
+        icon_ids.push(button_ids[i] + '-icon');
 
     for (let i = 0; i < button_ids.length; i++) {
+        document.getElementById(button_ids[i]).innerHTML =
+            data.buttons.list[i].text
+            + '\n'
+            + await fetch(data.buttons.list[i].icon)
+                .then((response) => {
+                    if (!response.ok)
+                        throw new Error('Failed to fetch data.json');
+                    return response.text();
+                })
+                .catch((error) => console.error(error));
+
+        document.getElementById(button_ids[i]).style.color = data.buttons.all.inactive;
+        document.getElementById(button_ids[i]).style.transition = '300ms ease-in-out';
+
+        document.getElementById(icon_ids[i]).style.fill = data.buttons.all.inactive;
+        document.getElementById(icon_ids[i]).style.transition = '300ms ease-in-out';
+
         document.getElementById(button_ids[i]).addEventListener('pointerover', () => {
-            document.getElementById(button_ids[i]).style.backgroundColor = '#ffffffff';
-            document.getElementById(button_ids[i]).style.color = active_colors[i];
-            document.getElementById(icon_ids[i]).style.fill = active_colors[i];
+            document.getElementById(button_ids[i]).style.backgroundColor = data.buttons.all.bg_active;
+            document.getElementById(button_ids[i]).style.color = data.buttons.list[i].color;
+            document.getElementById(icon_ids[i]).style.fill = data.buttons.list[i].color;
         });
         document.getElementById(button_ids[i]).addEventListener('pointerout', () => {
-            document.getElementById(button_ids[i]).style.backgroundColor = '#ffffff00';
-            document.getElementById(button_ids[i]).style.color = inactive_color;
-            document.getElementById(icon_ids[i]).style.fill = inactive_color;
+            document.getElementById(button_ids[i]).style.backgroundColor = data.buttons.all.bg_inactive;
+            document.getElementById(button_ids[i]).style.color = data.buttons.all.inactive;
+            document.getElementById(icon_ids[i]).style.fill = data.buttons.all.inactive;
         });
     }
 

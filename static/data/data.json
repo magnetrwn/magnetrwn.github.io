@@ -1,4 +1,37 @@
 {
+    "buttons": {
+        "all": {
+            "inactive": "#ffffffff",
+            "bg_active": "#ffffffff",
+            "bg_inactive": "#ffffff00"
+        },
+        "list": [
+            {
+                "text": "About: Me",
+                "color": "#d11c4bff",
+                "icon": "/app/html/icons/at.html",
+                "href": "#"
+            },
+            {
+                "text": "About: Skills & Jobs",
+                "color": "#d17f1cff",
+                "icon": "/app/html/icons/code.html",
+                "href": "#"
+            },
+            {
+                "text": "About: Projects",
+                "color": "#42a022ff",
+                "icon": "/app/html/icons/pull.html",
+                "href": "#"
+            },
+            {
+                "text": "About: Connect",
+                "color": "#2262a0ff",
+                "icon": "/app/html/icons/message.html",
+                "href": "#"
+            }
+        ]
+    },
     "flying": {
         "sprites": [
             "static/images/2572497.png",
@@ -18,10 +51,14 @@
             "static/images/usb_6540526.png"
         ]
     },
-
     "typer": {
         "title": "@magnetrwn",
         "leading": "<i>$</i> ",
+        "colors": {
+            "cli": "#aaaaaaff",
+            "transition": "#555555ff",
+            "regular": "#ffffffff"
+        },
         "commands": [
             [
                 "cat /var/www/what_s_this.txt",
