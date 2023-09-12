@@ -1,6 +1,7 @@
 import { delay_m } from './delay.js';
 
-class FlyingObject {
+
+export class FlyingObject {
     static init_id = 0;
 
     constructor(sprite, init_coords = [0, 0], linear_v = [0, 0], angular_v = 0) {
