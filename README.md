@@ -19,3 +19,4 @@ Since this is meant to be served over a client-only service such as GitHub Pages
 
 + Floating objects background, interactive with `PointerEvent`
 + Terminal-like and typewritten front message main section
++ Large explorer icons (from MingCute open-source collection)

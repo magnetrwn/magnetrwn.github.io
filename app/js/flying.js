@@ -1,4 +1,4 @@
-import { delay_m } from './delay.js';
+import { delay_m } from './util.js';
 
 
 export class FlyingObject {

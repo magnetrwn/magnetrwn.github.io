@@ -1,26 +1,9 @@
 import { FlyingManager } from "./flying.js";
 import { type, untype } from "./typer.js";
-import { delay } from './delay.js';
+import { delay, safe_fetch } from './util.js';
 
-const data = await fetch('/static/data/data.json')
-        .then((response) => {
-            if (!response.ok)
-                throw new Error('Failed to fetch data.json');
-            return response.json();
-        })
-        .catch((error) => console.error(error));
+const data = await safe_fetch('/static/data/data.json', true);
 
-const button_ids = ['main-button-1', 'main-button-2', 'main-button-3', 'main-button-4'];
-
-
-function flying_manager() {
-    const fl = new FlyingManager();
-
-    fl.setup_canvas('canvas');
-    fl.setup_sprites(data.flying.sprites);
-
-    fl.launch_animation();
-}
 
 async function typing_animation() {
     const title = document.getElementById('main-title');
@@ -48,42 +31,34 @@ async function typing_animation() {
     }
 }
 
-async function fade_buttons() {
-    await delay(1200);
-    for (let i = 0; i < button_ids.length; i++) {
-        await delay(300);
-        document.getElementById(button_ids[i]).style.opacity = 1;
-    }
-}
+async function setup_buttons() {
+    const button_ids = ['main-button-1', 'main-button-2', 'main-button-3', 'main-button-4'];
 
-async function set_buttons() {
     for (let i = 0; i < button_ids.length; i++) {
-        document.getElementById(button_ids[i]).innerHTML =
+        const button = document.getElementById(button_ids[i]);
+
+        button.innerHTML =
             data.buttons.list[i].text
             + '\n'
-            + await fetch(data.buttons.list[i].icon)
-                .then((response) => {
-                    if (!response.ok)
-                        throw new Error('Failed to fetch some button icon.');
-                    return response.text();
-                })
-                .catch((error) => console.error(error));
+            + await safe_fetch(data.buttons.list[i].icon);
 
-        document.getElementById(button_ids[i]).style.color = data.buttons.all.inactive;
-        document.getElementById(button_ids[i]).style.transition = '300ms ease-in-out';
+        const icon = document.getElementById(data.buttons.list[i].id);
 
-        document.getElementById(data.buttons.list[i].id).style.fill = data.buttons.all.inactive;
-        document.getElementById(data.buttons.list[i].id).style.transition = '300ms ease-in-out';
+        button.style.color = data.buttons.all.inactive;
+        button.style.transition = '300ms ease-in-out';
 
-        document.getElementById(button_ids[i]).addEventListener('pointerover', () => {
-            document.getElementById(button_ids[i]).style.backgroundColor = data.buttons.all.bg_active;
-            document.getElementById(button_ids[i]).style.color = data.buttons.list[i].color;
-            document.getElementById(data.buttons.list[i].id).style.fill = data.buttons.list[i].color;
+        icon.style.fill = data.buttons.all.inactive;
+        icon.style.transition = '300ms ease-in-out';
+
+        button.addEventListener('pointerover', () => {
+            button.style.backgroundColor = data.buttons.all.bg_active;
+            button.style.color = data.buttons.list[i].color;
+            icon.style.fill = data.buttons.list[i].color;
         });
-        document.getElementById(button_ids[i]).addEventListener('pointerout', () => {
-            document.getElementById(button_ids[i]).style.backgroundColor = data.buttons.all.bg_inactive;
-            document.getElementById(button_ids[i]).style.color = data.buttons.all.inactive;
-            document.getElementById(data.buttons.list[i].id).style.fill = data.buttons.all.inactive;
+        button.addEventListener('pointerout', () => {
+            button.style.backgroundColor = data.buttons.all.bg_inactive;
+            button.style.color = data.buttons.all.inactive;
+            icon.style.fill = data.buttons.all.inactive;
         });
     }
 
@@ -104,13 +79,22 @@ async function set_buttons() {
             main_box.style.visibility = 'visible';
         }
     });
+
+    await delay(1200);
+    for (let i = 0; i < button_ids.length; i++) {
+        await delay(300);
+        document.getElementById(button_ids[i]).style.opacity = 1;
+    }
 }
 
 async function main() {
-    set_buttons();
-    fade_buttons();
-    flying_manager();
+    const fl = new FlyingManager();
+    fl.setup_canvas('canvas');
+    fl.setup_sprites(data.flying.sprites);
+    fl.launch_animation();
+
     typing_animation();
+    setup_buttons();
 }
 
 main();
