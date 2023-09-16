@@ -61,9 +61,14 @@ async function setup_buttons() {
             icon.style.fill = data.buttons.all.inactive;
         });
         button.addEventListener('pointerdown', async () => {
-            await safe_fetch_inner(data.buttons.list[i].href, 'main-box');
+            await safe_fetch_inner(data.buttons.list[i].href, 'main-content');
         });
     }
+
+    document.getElementById('main-content').addEventListener('pointerdown', (event) => {
+        if (event.target.id === 'back-button')
+            goto_top();
+    });
 
     document.getElementById('toggle-main-box').addEventListener('pointerdown', async () => {
         const main_box = document.getElementById('main-box');
@@ -86,8 +91,16 @@ async function setup_buttons() {
     await delay(1200);
     for (let i = 0; i < button_ids.length; i++) {
         await delay(300);
-        document.getElementById(button_ids[i]).style.opacity = 1;
+        try {
+            document.getElementById(button_ids[i]).style.opacity = 1;
+        } catch (e) {}
     }
+}
+
+async function goto_top() {
+    await safe_fetch_inner(data.top_href, 'main-content');
+    typing_animation();
+    setup_buttons();
 }
 
 async function main() {
@@ -96,8 +109,7 @@ async function main() {
     fl.setup_sprites(data.flying.sprites);
     fl.launch_animation();
 
-    typing_animation();
-    setup_buttons();
+    goto_top();
 }
 
 main();

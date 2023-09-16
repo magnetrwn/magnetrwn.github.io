@@ -1,4 +1,5 @@
 {
+    "top_href": "/app/html/pages/main.html",
     "buttons": {
         "all": {
             "inactive": "#ffffffff",
