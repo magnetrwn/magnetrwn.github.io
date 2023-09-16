@@ -11,28 +11,28 @@
                 "text": "About: Me",
                 "color": "#d11c4bff",
                 "icon": "/app/html/icons/at.html",
-                "href": "#"
+                "href": "/app/html/pages/about-me.html"
             },
             {
                 "id": "code-icon",
                 "text": "About: Skills & Jobs",
                 "color": "#d17f1cff",
                 "icon": "/app/html/icons/code.html",
-                "href": "#"
+                "href": "/app/html/pages/skills.html"
             },
             {
                 "id": "pull-icon",
                 "text": "About: Projects",
                 "color": "#42a022ff",
                 "icon": "/app/html/icons/pull.html",
-                "href": "#"
+                "href": "/app/html/pages/projects.html"
             },
             {
                 "id": "message-icon",
                 "text": "About: Connect",
                 "color": "#2262a0ff",
                 "icon": "/app/html/icons/message.html",
-                "href": "#"
+                "href": "/app/html/pages/connect.html"
             }
         ]
     },

@@ -23,3 +23,9 @@ export async function safe_fetch(url, json = false) {
         console.error(error);
     }
 }
+
+export async function safe_fetch_inner(url, element_id) {
+    const element = document.getElementById(element_id);
+    const data = await safe_fetch(url);
+    element.innerHTML = data;
+}

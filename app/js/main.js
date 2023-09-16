@@ -1,6 +1,6 @@
 import { FlyingManager } from "./flying.js";
 import { type, untype } from "./typer.js";
-import { delay, safe_fetch } from './util.js';
+import { delay, safe_fetch, safe_fetch_inner } from './util.js';
 
 const data = await safe_fetch('/static/data/data.json', true);
 
@@ -59,6 +59,9 @@ async function setup_buttons() {
             button.style.backgroundColor = data.buttons.all.bg_inactive;
             button.style.color = data.buttons.all.inactive;
             icon.style.fill = data.buttons.all.inactive;
+        });
+        button.addEventListener('pointerdown', async () => {
+            await safe_fetch_inner(data.buttons.list[i].href, 'main-box');
         });
     }
 
