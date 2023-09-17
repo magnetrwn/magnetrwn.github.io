@@ -58,7 +58,7 @@
     },
     "typer": {
         "title": "@magnetrwn",
-        "leading": "<i>$</i> ",
+        "leading": "$ ",
         "colors": {
             "cli": "#aaaaaaff",
             "transition": "#555555ff",

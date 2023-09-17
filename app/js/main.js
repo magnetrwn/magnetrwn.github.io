@@ -6,32 +6,6 @@ const data = await safe_fetch('/static/data/data.json', true);
 const button_ids = ['main-button-1', 'main-button-2', 'main-button-3', 'main-button-4'];
 
 
-async function typing_animation() {
-    const title = document.getElementById('main-title');
-    const subtitle = document.getElementById('main-subtitle');
-
-    await delay(500);
-    await type(title, 75, data.typer.title);
-    await delay(500);
-
-    let i = 0;
-    while (true) {
-        subtitle.style.color = data.typer.colors.cli;
-        subtitle.innerHTML = data.typer.leading;
-        await delay(500);
-        await type(subtitle, 75, data.typer.commands[i][0]);
-        await delay(1500);
-        subtitle.style.color = data.typer.colors.transition;
-        subtitle.innerHTML = data.typer.commands[i][1];
-        await delay(75);
-        subtitle.style.color = data.typer.colors.regular;
-        await delay(4000);
-        await untype(subtitle, 50);
-        await delay(2000);
-        i = (i + 1) % data.typer.commands.length;
-    }
-}
-
 async function fetch_buttons() {
     for (let i = 0; i < button_ids.length; i++) {
         const button = document.getElementById(button_ids[i]);
@@ -62,6 +36,7 @@ async function fetch_buttons() {
         });
 
         button.addEventListener('pointerdown', async () => {
+            typing_stop();
             await change_animation(data.buttons.list[i].href);
         });
     }
@@ -104,29 +79,69 @@ async function button_animation() {
     }
 }
 
+let _typing_running = false;
+async function typing_animation() {
+    _typing_running = true;
+    const title = document.getElementById('main-title');
+    const subtitle = document.getElementById('main-subtitle');
+
+    await delay(500);
+    await type(title, 75, data.typer.title);
+    await delay(500);
+
+    let i = 0;
+    while (_typing_running) {
+        subtitle.style.color = data.typer.colors.cli;
+        subtitle.innerHTML = data.typer.leading;
+        await delay(500);
+        await type(subtitle, 75, data.typer.commands[i][0]);
+        await delay(1500);
+        if (!_typing_running)
+            break;
+        subtitle.style.color = data.typer.colors.transition;
+        subtitle.innerHTML = data.typer.commands[i][1];
+        await delay(75);
+        subtitle.style.color = data.typer.colors.regular;
+        await delay(4000);
+        await untype(subtitle, 50);
+        await delay(2000);
+        i = (i + 1) % data.typer.commands.length;
+    }
+}
+
+function typing_stop() {
+    _typing_running = false;
+}
+
 async function change_animation(url) {
     await delay(300);
-    await untype(document.getElementById('main-title'), 20);
+    await untype(document.getElementById('main-title'), 75);
     document.getElementById('main-title').style.opacity = 0;
     await delay(300);
-    await untype(document.getElementById('main-subtitle'), 20);
+    await untype(document.getElementById('main-subtitle'), 30);
     document.getElementById('main-subtitle').style.opacity = 0;
     document.getElementById('main-buttons').style.transition = 'opacity 300ms ease-in-out';
     document.getElementById('main-buttons').style.opacity = 0;
+    document.getElementById('main-content').style.opacity = 0;
     await delay(1000);
     await safe_fetch_inner(url, 'main-content');
+    document.getElementById('main-content').style.opacity = 1;
     document.getElementById('back-button').innerHTML = await safe_fetch('/app/html/icons/close.html');
     document.getElementById('back-button').addEventListener('pointerdown', goto_top);
 }
 
-// TODO: fix the multiple calling of this function, then remove the lock
+// TODO: fix the multiple calling of this function from clicking the close icon, then remove the lock
 let goto_top_lock = false;
 async function goto_top() {
     if (goto_top_lock)
         return;
     goto_top_lock = true;
 
+    document.getElementById('main-content').style.opacity = 0;
+    await delay(700);
     await safe_fetch_inner(data.top_href, 'main-content');
+    document.getElementById('main-content').style.opacity = 1;
+    await delay(300);
     await fetch_buttons();
     button_animation();
     typing_animation();
