@@ -16,7 +16,7 @@
             },
             {
                 "id": "code-icon",
-                "text": "About: Skills & Jobs",
+                "text": "About: Skills",
                 "color": "#d17f1cff",
                 "icon": "/app/html/icons/code.html",
                 "href": "/app/html/pages/skills.html"

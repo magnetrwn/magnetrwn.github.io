@@ -62,9 +62,7 @@ async function fetch_buttons() {
         });
 
         button.addEventListener('pointerdown', async () => {
-            await safe_fetch_inner(data.buttons.list[i].href, 'main-content');
-            document.getElementById('back-button').innerHTML = await safe_fetch('/app/html/icons/close.html');
-            document.getElementById('back-button').addEventListener('pointerdown', goto_top);
+            await change_animation(data.buttons.list[i].href);
         });
     }
 }
@@ -99,17 +97,33 @@ async function setup_buttons() {
 async function button_animation() {
     await delay(1200);
     for (let i = 0; i < button_ids.length; i++) {
-        await delay(300);
+        await delay(200);
         try {
             document.getElementById(button_ids[i]).style.opacity = 1;
         } catch (e) {}
     }
 }
 
+async function change_animation(url) {
+    await delay(300);
+    await untype(document.getElementById('main-title'), 20);
+    document.getElementById('main-title').style.opacity = 0;
+    await delay(300);
+    await untype(document.getElementById('main-subtitle'), 20);
+    document.getElementById('main-subtitle').style.opacity = 0;
+    document.getElementById('main-buttons').style.transition = 'opacity 300ms ease-in-out';
+    document.getElementById('main-buttons').style.opacity = 0;
+    await delay(1000);
+    await safe_fetch_inner(url, 'main-content');
+    document.getElementById('back-button').innerHTML = await safe_fetch('/app/html/icons/close.html');
+    document.getElementById('back-button').addEventListener('pointerdown', goto_top);
+}
+
 // TODO: fix the multiple calling of this function, then remove the lock
 let goto_top_lock = false;
 async function goto_top() {
-    if (goto_top_lock) return;
+    if (goto_top_lock)
+        return;
     goto_top_lock = true;
 
     await safe_fetch_inner(data.top_href, 'main-content');
