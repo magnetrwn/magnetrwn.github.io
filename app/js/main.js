@@ -63,6 +63,8 @@ async function fetch_buttons() {
 
         button.addEventListener('pointerdown', async () => {
             await safe_fetch_inner(data.buttons.list[i].href, 'main-content');
+            document.getElementById('back-button').innerHTML = await safe_fetch('/app/html/icons/close.html');
+            document.getElementById('back-button').addEventListener('pointerdown', goto_top);
         });
     }
 }
@@ -104,11 +106,18 @@ async function button_animation() {
     }
 }
 
+// TODO: fix the multiple calling of this function, then remove the lock
+let goto_top_lock = false;
 async function goto_top() {
+    if (goto_top_lock) return;
+    goto_top_lock = true;
+
     await safe_fetch_inner(data.top_href, 'main-content');
     await fetch_buttons();
     button_animation();
     typing_animation();
+
+    goto_top_lock = false;
 }
 
 async function main() {
