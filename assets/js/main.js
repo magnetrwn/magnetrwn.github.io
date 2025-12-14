@@ -1,8 +1,12 @@
 import { FlyingManager } from "./flying.js";
 
-async function main() {
+let started = false;
+
+async function initAndStart() {
+  if (started) return;
+  if (!document.body) return;
+
   let canvas = document.getElementById("bg-canvas");
-  
   if (!canvas) {
     canvas = document.createElement("canvas");
     canvas.id = "bg-canvas";
@@ -15,7 +19,22 @@ async function main() {
   const fl = new FlyingManager();
   fl.setup_canvas("bg-canvas");
   fl.setup_sprites(bg.sprites);
+
+  started = true;
   fl.launch_animation();
 }
 
-main();
+function waitLoop() {
+  initAndStart().catch((e) => {
+    // don’t spam every frame
+    if (!waitLoop._logged) {
+      console.warn("BG init delayed:", e);
+      waitLoop._logged = true;
+    }
+  });
+
+  if (!started) 
+    requestAnimationFrame(waitLoop);
+}
+
+requestAnimationFrame(waitLoop);
