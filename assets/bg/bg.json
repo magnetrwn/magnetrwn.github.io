@@ -1,19 +1,19 @@
 {
     "sprites": [
-        "bg/2572497.png",
-        "bg/2572724.png",
-        "bg/2807340.png",
-        "bg/2809291.png",
-        "bg/2878889.png",
-        "bg/5968544.png",
-        "bg/amogus-sm.png",
-        "bg/artificial-intelligence.png",
-        "bg/cloud.png",
-        "bg/gaming-pad.png",
-        "bg/idea-bulb.png",
-        "bg/idea.png",
-        "bg/layer_6680857.png",
-        "bg/setting.png",
-        "bg/usb_6540526.png"
+        "assets/bg/2572497.png",
+        "assets/bg/2572724.png",
+        "assets/bg/2807340.png",
+        "assets/bg/2809291.png",
+        "assets/bg/2878889.png",
+        "assets/bg/5968544.png",
+        "assets/bg/amogus-sm.png",
+        "assets/bg/artificial-intelligence.png",
+        "assets/bg/cloud.png",
+        "assets/bg/gaming-pad.png",
+        "assets/bg/idea-bulb.png",
+        "assets/bg/idea.png",
+        "assets/bg/layer_6680857.png",
+        "assets/bg/setting.png",
+        "assets/bg/usb_6540526.png"
     ]
 }
