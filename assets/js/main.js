@@ -9,9 +9,8 @@ async function main() {
   const bg = await fetch(new URL("../bg/bg.json", import.meta.url)).then(r => r.json());
 
   const fl = new FlyingManager();
-  fl.setup_canvas("#bg-canvas");
+  fl.setup_canvas("bg-canvas");
   fl.setup_sprites(bg.sprites);
   fl.launch_animation();
 }
-
 main();
