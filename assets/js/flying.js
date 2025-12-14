@@ -1,4 +1,10 @@
-import { delay_m } from './util.js';
+export function delay_m(object, method, ms) {
+    return function() {
+        setTimeout(() => {
+            method.apply(object, arguments);
+        }, ms);
+    };
+}
 
 export class FlyingObject {
     static init_id = 0;
