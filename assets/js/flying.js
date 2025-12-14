@@ -131,7 +131,7 @@ export class FlyingManager {
 
     setup_canvas(canvas_id) {
         this.canvas = document.getElementById(canvas_id);
-        this.ctx = canvas.getContext('2d');
+        this.ctx = this.canvas.getContext('2d');
 
         window.addEventListener('resize', delay_m(this, this._on_resize, 75));
 
