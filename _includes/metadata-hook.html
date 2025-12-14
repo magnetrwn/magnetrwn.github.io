@@ -1,0 +1,6 @@
+<!-- _includes/metadata-hook.html -->
+<script type="module">
+  window.addEventListener("DOMContentLoaded", async () => {
+    await import("{{ '/assets/js/main.js' | relative_url }}");
+  });
+</script>
