@@ -133,15 +133,27 @@ export class FlyingManager {
         this.canvas = document.getElementById(canvas_id);
         this.ctx = this.canvas.getContext('2d');
 
+        Object.assign(this.canvas.style, {
+            position: "fixed",
+            inset: "0",
+            width: "100vw",
+            height: "100vh",
+            display: "block",
+            margin: "0",
+            padding: "0",
+            zIndex: "0",
+            pointerEvents: "none",
+        });
+
         window.addEventListener('resize', delay_m(this, this._on_resize, 75));
 
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
 
-        this.canvas.addEventListener('pointerdown', delay_m(this, this._on_pointer_down, 75));
-        this.canvas.addEventListener('pointerup', delay_m(this, this._on_pointer_up, 75));
-        this.canvas.addEventListener('pointercancel', delay_m(this, this._on_pointer_up, 75));
-        this.canvas.addEventListener('pointermove', delay_m(this, this._on_pointer_move, 75));
+        window.addEventListener('pointerdown', delay_m(this, this._on_pointer_down, 75));
+        window.addEventListener('pointerup', delay_m(this, this._on_pointer_up, 75));
+        window.addEventListener('pointercancel', delay_m(this, this._on_pointer_up, 75));
+        window.addEventListener('pointermove', delay_m(this, this._on_pointer_move, 75));
     }
 
     setup_sprites(sprites) {
