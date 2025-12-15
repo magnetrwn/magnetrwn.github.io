@@ -143,6 +143,7 @@ export class FlyingManager {
             padding: "0",
             zIndex: "0",
             pointerEvents: "none",
+            background: "linear-gradient(60deg, #443c75ff, #4d718bff)"
         });
 
         window.addEventListener('resize', delay_m(this, this._on_resize, 75));

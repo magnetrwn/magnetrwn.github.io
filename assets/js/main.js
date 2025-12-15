@@ -1,6 +1,8 @@
 import { FlyingManager } from "./flying.js";
 
 async function main() {
+  document.getElementById("tail-wrapper").insertAdjacentElement("afterend", document.getElementById("tail-wrapper").querySelector("footer"));
+
   let canvas = document.getElementById("bg-canvas");
   
   if (!canvas) {
