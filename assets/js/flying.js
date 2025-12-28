@@ -143,8 +143,12 @@ export class FlyingManager {
             padding: "0",
             zIndex: "0",
             pointerEvents: "none",
-            background: "linear-gradient(60deg, #443c7540, #4d718b40)"
+            background: "linear-gradient(60deg, #00000000, #4d718b20)"
         });
+
+        this.ctx.imageSmoothingEnabled = false;
+        this.ctx.webkitImageSmoothingEnabled = false;
+        this.ctx.mozImageSmoothingEnabled = false;
 
         window.addEventListener('resize', delay_m(this, this._on_resize, 75));
 
