@@ -38,7 +38,7 @@ export class FlyingObject {
             this.angular_v = 0.01;
     }
 
-    apply_force(force_v, strength = 0.15) {
+    apply_force(force_v, strength = -0.15) {
         // you can both attract and repel objects with the strength parameter
         const dx = force_v[0] - this.coords[0];
         const dy = force_v[1] - this.coords[1];
@@ -87,7 +87,9 @@ export class FlyingObject {
 
         ctx.translate(this.coords[0], this.coords[1]);
         ctx.rotate(this.angle);
-        ctx.drawImage(this.sprite, -this.sprite.width / 2, -this.sprite.height / 2);
+
+	const s = Math.max(1, Math.floor(Math.min(innerWidth, innerHeight) / 320));
+        ctx.drawImage(this.sprite, -this.sprite.width / 2 * s, -this.sprite.height / 2 * s, this.sprite.width * s, this.sprite.height * s);
 
         ctx.restore();
     }
@@ -143,7 +145,8 @@ export class FlyingManager {
             padding: "0",
             zIndex: "0",
             pointerEvents: "none",
-            background: "linear-gradient(60deg, #00000000, #4d718b20)"
+            background: "linear-gradient(60deg, #00000000, #4d718b2f)",
+	    opacity: "0.7"
         });
 
         this.ctx.imageSmoothingEnabled = false;
