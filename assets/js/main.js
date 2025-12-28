@@ -13,10 +13,12 @@ async function main() {
   }
 
   const bg = await fetch(new URL("../bg/bg.json", import.meta.url)).then(r => r.json());
+  const rnd_imgs = bg.sprites.slice(1).sort(() => Math.random() - 0.5).slice(0, 10);
+  const rnd_imgs_chosen = [bg.sprites[0], ...rnd_imgs];
 
   const fl = new FlyingManager();
   fl.setup_canvas("bg-canvas");
-  fl.setup_sprites(bg.sprites);
+  fl.setup_sprites(rnd_imgs_chosen);
   fl.launch_animation();
 }
 
